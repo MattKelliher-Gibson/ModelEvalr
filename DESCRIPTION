@@ -26,4 +26,6 @@ Suggests:
     doParallel,
     parallel
 License: GPL-3
+URL: https://github.com/MattKelliher-Gibson/ModelEvalr
+BugReports: https://github.com/MattKelliher-Gibson/ModelEvalr/issues
 LazyData: TRUE
