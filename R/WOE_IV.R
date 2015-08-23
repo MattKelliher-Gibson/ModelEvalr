@@ -218,12 +218,12 @@ WOE <- function(woe_tables, IV_table){
 
 #' @export
 woe_plot <- function(woe_table, title) {
-  plot1 <- ggplot2::ggplot(woe_table, aes(Bin, ConversionRate)) + ggplot2::geom_line(color = "green4") + ggplot2::geom_hline(yintercept = (sum(woe_table$Converted) / sum(woe_table$Total)))
+  plot1 <- ggplot2::ggplot(woe_table, ggplot2::aes(Bin, ConversionRate)) + ggplot2::geom_line(color = "green4") + ggplot2::geom_hline(yintercept = (sum(woe_table$Converted) / sum(woe_table$Total)))
 
   if (sum(woe_table$IV) > .05){
-    plot2 <- ggplot2::ggplot(woe_table, aes(Bin, IV)) + geom_line(color = "blue")
+    plot2 <- ggplot2::ggplot(woe_table, ggplot2::aes(Bin, IV)) + ggplot2::geom_line(color = "blue")
   } else {
-    plot2 <- ggplot2::ggplot(woe_table, aes(Bin, IV)) + geom_line(color = "red")
+    plot2 <- ggplot2::ggplot(woe_table, ggplot2::aes(Bin, IV)) + ggplot2::geom_line(color = "red")
   }
 
   if (missing(title)){
