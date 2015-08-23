@@ -1,0 +1,29 @@
+Package: ModelEvalr
+Type: Package
+Title: Tools for Evaluating and Comparing Models
+Version: 0.0.0.9000
+Date: 2015-08-12
+Description: A collections of functions to help create, evaluating, and comparing models.
+    Specifically GBM and GAM models
+Authors@R: person("Matthew", "Kelliher-Gibson", email = "mkg@mattkellihergibson.com",
+		role = c("aut", "cre"))
+Depends:
+    R (>= 3.2.1),
+Imports:
+    data.table (>= 1.9.4),
+    dplyr (>= 0.4.2),
+    foreach (>= 1.4.2),
+    gbm (>= 2.1.1),
+    ggplot2 (>= 1.0.1),
+    gridExtra (>= 2.0.0),
+    Hmisc (>= 3.16-0),
+    magrittr (>= 1.4-7),
+    methods (>= 3.2.1),
+    mgcv (>= 1.8-7),
+    plyr (>= 1.8.3),
+    ROCR (>= 1.0-7)
+Suggests:
+    doParallel,
+    parallel
+License: GPL-3
+LazyData: TRUE
