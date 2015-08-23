@@ -1,8 +1,8 @@
 Package: ModelEvalr
 Type: Package
 Title: Tools for Evaluating and Comparing Models
-Version: 0.0.0.9000
-Date: 2015-08-12
+Version: 0.0.0.9001
+Date: 2015-08-23
 Description: A collections of functions to help create, evaluating, and comparing models.
     Specifically GBM and GAM models
 Authors@R: person("Matthew", "Kelliher-Gibson", email = "mkg@mattkellihergibson.com",
