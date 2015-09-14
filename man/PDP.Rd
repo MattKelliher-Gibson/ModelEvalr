@@ -2,10 +2,13 @@
 % Please edit documentation in R/PDP.R
 \name{PDP}
 \alias{PDP}
+\alias{PDP_gg}
 \title{Plots Partial Dependency Plots (PDP)}
 \usage{
 PDP(model, iter, var.name, xlim = NULL, pts = 4000,
   ylab = "P(Conversion)", leg = "right", title = NULL)
+
+PDP_gg(data, model, var, iter, points = 4000)
 }
 \arguments{
 \item{model}{Model Object (curently only gbm object tested)}

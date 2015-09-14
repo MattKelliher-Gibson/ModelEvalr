@@ -4,7 +4,7 @@
 \alias{PDP_Hist}
 \title{Creates PDP, Histogram, and PLSMO plots}
 \usage{
-PDP_Hist(dataset, response, model, best.iter.model)
+PDP_Hist(dataset, response, model, best.iter.model, gg = FALSE, ...)
 }
 \arguments{
 \item{dataset}{\code{data.frame} model object was built from}

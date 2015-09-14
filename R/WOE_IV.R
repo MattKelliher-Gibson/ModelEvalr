@@ -30,24 +30,14 @@ WOE_IV.data.table <- function(data, variables, convert = NULL, .threshold = .1){
   setnames(datatable, convert, "Response_Var")
 
   for (i in variables) {
-    table <- datatable[, .(Total = .N, Converted = sum(Response_Var)), by = eval(noquote(i))]
-
-    table <- dplyr::arrange_(table, i)
-
-    setnames(table, i, "Variable")
+    table <- woe_table(datatable, i)
 
     bins_total <- table[, sum(Total)]
     bins_convert <- table[, sum(Converted)]
 
     table[, Pct_Total := Total/ bins_total]
 
-    if (class(datatable[[i]]) == "character") {
-      table[, Bin := .I]
-    } else if (nrow(table) < 5) {
-      table[, Bin := .I]
-    } else {
-      Bin(table, "Bin", threshold = .threshold)
-    }
+    woe_bin(datatable, table, i)
 
     table_2 <- table[,c(-1,-4), with = FALSE] %>% dplyr::group_by(Bin) %>% dplyr::summarise_each(funs(sum))
 
@@ -76,7 +66,7 @@ WOE_IV.data.table <- function(data, variables, convert = NULL, .threshold = .1){
 
   names(IV) <- c("Variable", "IV")
 
-  final <- list(var_list = var.list, IV = IV)
+  final <- WOE(var.list, IV)
 }
 
 #' @export
@@ -85,38 +75,20 @@ WOE_IV.data.table <- function(data, variables, convert = NULL, .threshold = .1){
 WOE_IV.default <- function(data, variables, convert = NULL, .threshold = .1){
   var.list <- list()
 
-  names(data)[convert] <- "Response_Var"
+  names(data)[match(convert, names(data))] <- "Response_Var"
+
+  bins_total <- nrow(data)
 
   for (i in variables) {
-    table <- data %>% dplyr::group_by_(i) %>% dplyr::summarise_(Total = dplyr::n(), Converted = sum(Response_Var))
+    table <- woe_table(data, i)
 
-    table <- dplyr::arrange_(table, i)
-
-    names(table)[[i]] <- "Variable"
-
-    bins_total <- sum(data$Total)
     bins_convert <- sum(data$Converted)
 
     table$Pct_Total <- table$Total/ bins_total
 
-    if (class(data[[i]]) == "character" || nrow(table) <=5) {
-      .row <- c(1:nrow(data))
-      table$Bin <- .row
-    } else {
-      Bin(table, "Bin")
-    }
+    table <- woe_bin(data, table, i)
 
-    table_2 <- table[,c(-1,-4)] %>% dplyr::group_by_(Bin) %>% dplyr::summarise_each_(funs(sum))
-
-    table_2$Pct_Good <- table_2$Converted / bins_convert
-
-    table_2$Pct_Bad <- (table_2$Total - table_2$Converted) / bins_total
-
-    table_2$ConversionRate <- table_2$Converted / table_2$Total
-
-    table_2$WOE <- ifelse(table_2$Pct_Good == 0 | table_2$Pct_Bad == 0, 0, log(table2$Pct_Good/table2$Pct_Bad))
-
-    table_2$IV <- (table_2$Pct_Good - table_2$Pct_Bad)*table_2$WOE
+    table_2 <- woe_table_2(table, bins_convert, bons_total)
 
     if (class(datatable[[i]]) == "character") {
       table$Min <- Variable
@@ -129,7 +101,7 @@ WOE_IV.default <- function(data, variables, convert = NULL, .threshold = .1){
 
     var.list[[i]] <- table_3
 
-    rm(table, bins_total, bins_convert, table_2, table_3)
+    rm(table, bins_convert, table_2, table_3)
   }
 
   # var.list
@@ -138,7 +110,7 @@ WOE_IV.default <- function(data, variables, convert = NULL, .threshold = .1){
 
   names(IV) <- c("Variable", "IV")
 
-  final <- list(var_list = var.list, IV = IV)
+  final <- WOE(var.list, IV)
 }
 
 #' @export
@@ -231,4 +203,75 @@ woe_plot <- function(woe_table, title) {
   } else {
     gridExtra::grid.arrange(plot1 + ggplot2::ggtitle(title), plot2 + ggplot2::ggtitle(title), ncol = 2)
   }
+}
+
+#' @importFrom magrittr "%>%"
+woe_table <- function(datatable, var, response = Response_Var){
+  UseMethod("woe_table")
+}
+
+woe_table.default <- function(datatable, var, response = Response_Var){
+  table <- dataframe %>% dplyr::group_by_(var) %>% dplyr::summarise_(Total = dplyr::n(), Converted = sum(response))
+
+  table <- dplyr::arrange_(table, var)
+
+  names(table)[[var]] <- "Variable"
+
+  table
+}
+
+#' @import data.table
+#'
+woe_table.data.table <- function(datatable, var, response = Response_Var){
+  table <- datatable[, .(Total = .N, Converted = sum(get(response))), by = eval(noquote(var))]
+
+  table <- dplyr::arrange_(table, i)
+
+  setnames(table, i, "Variable")
+
+  table
+}
+
+woe_bin <- function(dataset, table, var){
+  UseMethod("woe_bin")
+}
+
+woe_bin.default <- function(dataset, table, var){
+ if (class(dataset[[var]]) == "character" || nrow(table) <=5) {
+    .row <- c(1:nrow(table))
+    table$Bin <- .row
+    table
+  } else {
+    Bin(table, "Bin")
+  }
+}
+
+woe_bin.data.table <- function(dataset, table, var){
+ if (class(dataset[[var]]) == "character") {
+    table[, Bin := .I]
+  } else if (nrow(table) < 5) {
+    table[, Bin := .I]
+  } else {
+    Bin(table, "Bin", threshold = .threshold)
+  }
+}
+
+woe_table_2 <- function(){
+  UseMethod("woe_table_2")
+}
+
+woe_table_2.default <- function(table, bins_convert, bins_total){
+  table_2 <- table[,c(-1,-4)] %>% dplyr::group_by_(Bin) %>% dplyr::summarise_each_(funs(sum))
+
+  table_2$Pct_Good <- table_2$Converted / bins_convert
+
+  table_2$Pct_Bad <- (table_2$Total - table_2$Converted) / bins_total
+
+  table_2$ConversionRate <- table_2$Converted / table_2$Total
+
+  table_2$Pct_Total <- (table_2$Total/ bins_total)
+
+  table_2$WOE <- ifelse(table_2$Pct_Good == 0 | table_2$Pct_Bad == 0, 0, log(table2$Pct_Good/table2$Pct_Bad))
+
+  table_2$IV <- (table_2$Pct_Good - table_2$Pct_Bad)*table_2$WOE
 }

@@ -21,7 +21,8 @@ Imports:
     methods (>= 3.2.1),
     mgcv (>= 1.8-7),
     plyr (>= 1.8.3),
-    ROCR (>= 1.0-7)
+    ROCR (>= 1.0-7),
+    ggplot2 (>= 1.0.1)
 Suggests:
     doParallel,
     parallel

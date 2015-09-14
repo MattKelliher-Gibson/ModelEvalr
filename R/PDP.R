@@ -30,3 +30,24 @@ PDP <- function(model, iter, var.name, xlim = NULL, pts = 4000, ylab = "P(Conver
 
   legend(x=leg, legend = bquote(delta == .(t3)*"%"))
 }
+
+#' @export
+#' @rdname PDP
+PDP_gg <- function(data, model, var, iter, points = 4000){
+
+  d1 <- match(var, model[["var.names"]])
+  d2 <- gbm::plot.gbm(model, d1, iter, return.grid = TRUE, cont = points)
+  d2$y2 <- 1/(1+exp(-d2$y))
+  names(d2)[1] <- "Variable"
+
+  d3 <- round(max(d2$y2) - min(d2$y2), 3) * 100
+
+  d4 <- ggplot2::ggplot(d2, ggplot2::aes(Variable, y2))
+  plot1 <- d4 + ggplot2::geom_line() + ggplot2::labs(title = paste("PDP Plot of", var), x = var, y = "P(Churn)") + ggplot2::geom_text(x = median(d2$Variable), y = max(d2$y2), label = paste0("\u0394", " = ", d3, "%"))
+
+
+  data$VARIABLE <- data[[var]]
+  d5 <- ggplot2::ggplot(data, ggplot2::aes(VARIABLE))
+  plot2 <- d5 + ggplot2::geom_histogram() + ggplot2::labs(title = paste("Histogram of", var), y = "Total", x = var)
+  gridExtra::grid.arrange(plot1, plot2, ncol = 2)
+}
