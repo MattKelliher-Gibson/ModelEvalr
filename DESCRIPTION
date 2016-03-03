@@ -1,10 +1,10 @@
 Package: ModelEvalr
 Type: Package
 Title: Tools for Evaluating and Comparing Models
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Date: 2015-08-23
-Description: A collections of functions to help create, evaluating, and comparing models.
-    Specifically GBM and GAM models
+Description: A collections of functions to help create, evaluating, and
+    comparing models. Specifically GBM and GAM models
 Authors@R: person("Matthew", "Kelliher-Gibson", email = "mkg@mattkellihergibson.com",
 		role = c("aut", "cre"))
 Depends:
@@ -30,3 +30,4 @@ License: GPL-3
 URL: https://github.com/MattKelliher-Gibson/ModelEvalr
 BugReports: https://github.com/MattKelliher-Gibson/ModelEvalr/issues
 LazyData: TRUE
+RoxygenNote: 5.0.1

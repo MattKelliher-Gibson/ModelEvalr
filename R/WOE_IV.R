@@ -37,7 +37,7 @@ WOE_IV.data.table <- function(data, variables, convert = NULL, .threshold = .1){
 
     table[, Pct_Total := Total/ bins_total]
 
-    woe_bin(datatable, table, i)
+    woe_bin(datatable, table, i, threshold = .threshold)
 
     table_2 <- table[,c(-1,-4), with = FALSE] %>% dplyr::group_by(Bin) %>% dplyr::summarise_each(funs(sum))
 
@@ -86,7 +86,7 @@ WOE_IV.default <- function(data, variables, convert = NULL, .threshold = .1){
 
     table$Pct_Total <- table$Total/ bins_total
 
-    table <- woe_bin(data, table, i)
+    table <- woe_bin(data, table, i, threshold = .threshold)
 
     table_2 <- woe_table_2(table, bins_convert, bons_total)
 
@@ -206,11 +206,11 @@ woe_plot <- function(woe_table, title) {
 }
 
 #' @importFrom magrittr "%>%"
-woe_table <- function(datatable, var, response = Response_Var){
+woe_table <- function(datatable, var, response = "Response_Var"){
   UseMethod("woe_table")
 }
 
-woe_table.default <- function(datatable, var, response = Response_Var){
+woe_table.default <- function(datatable, var, response = "Response_Var"){
   table <- dataframe %>% dplyr::group_by_(var) %>% dplyr::summarise_(Total = dplyr::n(), Converted = sum(response))
 
   table <- dplyr::arrange_(table, var)
@@ -222,37 +222,37 @@ woe_table.default <- function(datatable, var, response = Response_Var){
 
 #' @import data.table
 #'
-woe_table.data.table <- function(datatable, var, response = Response_Var){
+woe_table.data.table <- function(datatable, var, response = "Response_Var"){
   table <- datatable[, .(Total = .N, Converted = sum(get(response))), by = eval(noquote(var))]
 
-  table <- dplyr::arrange_(table, i)
+  table <- dplyr::arrange_(table, var)
 
-  setnames(table, i, "Variable")
+  setnames(table, var, "Variable")
 
   table
 }
 
-woe_bin <- function(dataset, table, var){
+woe_bin <- function(dataset, table, var, threshold){
   UseMethod("woe_bin")
 }
 
-woe_bin.default <- function(dataset, table, var){
+woe_bin.default <- function(dataset, table, var, threshold){
  if (class(dataset[[var]]) == "character" || nrow(table) <=5) {
     .row <- c(1:nrow(table))
     table$Bin <- .row
     table
   } else {
-    Bin(table, "Bin")
+    Bin(table, "Bin", threshold = threshold)
   }
 }
 
-woe_bin.data.table <- function(dataset, table, var){
+woe_bin.data.table <- function(dataset, table, var, threshold){
  if (class(dataset[[var]]) == "character") {
     table[, Bin := .I]
   } else if (nrow(table) < 5) {
     table[, Bin := .I]
   } else {
-    Bin(table, "Bin", threshold = .threshold)
+    Bin(table, "Bin", threshold = threshold)
   }
 }
 
