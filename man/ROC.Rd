@@ -21,6 +21,8 @@ ROC(model, data, response, ...)
 \item{data}{\code{data.frame} of validation data}
 
 \item{response}{depenedent variable name}
+
+\item{...}{all other arugements}
 }
 \value{
 ROC plot

@@ -42,12 +42,12 @@ PDP_gg <- function(data, model, var, iter, points = 4000){
 
   d3 <- round(max(d2$y2) - min(d2$y2), 3) * 100
 
-  d4 <- ggplot2::ggplot(d2, ggplot2::aes(Variable, y2))
+  d4 <- ggplot2::ggplot(d2, mapping = ggplot2::aes(x = Variable, y = y2))
   plot1 <- d4 + ggplot2::geom_line() + ggplot2::labs(title = paste("PDP Plot of", var), x = var, y = "P(Churn)") + ggplot2::geom_text(x = median(d2$Variable), y = max(d2$y2), label = paste0("\u0394", " = ", d3, "%"))
 
 
   data$VARIABLE <- data[[var]]
-  d5 <- ggplot2::ggplot(data, ggplot2::aes(VARIABLE))
+  d5 <- ggplot2::ggplot(data, mapping = ggplot2::aes(VARIABLE))
   plot2 <- d5 + ggplot2::geom_histogram() + ggplot2::labs(title = paste("Histogram of", var), y = "Total", x = var)
   gridExtra::grid.arrange(plot1, plot2, ncol = 2)
 }

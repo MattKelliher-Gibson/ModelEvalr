@@ -5,7 +5,7 @@
 #' @param data \code{data.frame} of validation data
 #' @param model a model object (e.g. gbm, gam)
 #' @param response depenedent variable name
-#' @param ...
+#' @param ... all other arugements
 #' @return ROC plot
 #'
 #' @import methods
