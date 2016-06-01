@@ -8,7 +8,6 @@
 #' @return object of class formula
 #'
 #' @name Model Functions
-NULL
 
 #' @export
 #' @rdname Model Functions

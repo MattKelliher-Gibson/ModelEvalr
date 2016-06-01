@@ -20,7 +20,7 @@ WOE_IV <- function(data, variables, convert = NULL, .threshold){
 
 #' @export
 #' @import data.table
-#' @describeIn WOE_IV
+#' @describeIn WOE_IV Method for data.table
 
 WOE_IV.data.table <- function(data, variables, convert = NULL, .threshold = .1){
   var.list <- list()
@@ -70,7 +70,7 @@ WOE_IV.data.table <- function(data, variables, convert = NULL, .threshold = .1){
 }
 
 #' @export
-#' @describeIn WOE_IV
+#' @describeIn WOE_IV defult method
 
 WOE_IV.default <- function(data, variables, convert = NULL, .threshold = .1){
   var.list <- list()

@@ -17,7 +17,7 @@ Bin <- function(data, var = "Bin", threshold = .1){
 
 #' @export
 #' @import data.table
-#' @describeIn Bin
+#' @describeIn Bin Method for data.table
 
 Bin.data.table <- function(data, var = "Bin", threshold = .1){
   bin <- 0
@@ -49,7 +49,7 @@ Bin.data.table <- function(data, var = "Bin", threshold = .1){
 }
 
 #' @export
-#' @describeIn Bin
+#' @describeIn Bin Method for data.frame
 
 Bin.data.frame <- function(data, var = "Bin", threshold = .1){
   bin <- 0

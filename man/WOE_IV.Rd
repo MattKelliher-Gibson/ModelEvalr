@@ -3,10 +3,17 @@
 \name{WOE_IV}
 \alias{WOE}
 \alias{WOE_IV}
+\alias{WOE_IV.data.table}
+\alias{WOE_IV.default}
 \alias{WOE_IV_multi}
 \title{Calculate WOE and IV}
 \usage{
 WOE_IV(data, variables, convert = NULL, .threshold)
+
+\method{WOE_IV}{data.table}(data, variables, convert = NULL,
+  .threshold = 0.1)
+
+\method{WOE_IV}{default}(data, variables, convert = NULL, .threshold = 0.1)
 
 WOE_IV_multi(data, variables, convert = NULL, convert_loc = length(data),
   .threshold = 0.1)
@@ -31,4 +38,10 @@ a list of length 2 containing the summarized WOE and IV values and
 \code{WOE_IV} caluclates the Weight of Evidence (WOE) and
    Information Value (IV) of a list of variable for a \code{data.frame}
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{data.table}: Method for data.table
+
+\item \code{default}: defult method
+}}
 

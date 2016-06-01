@@ -2,9 +2,15 @@
 % Please edit documentation in R/Bin.R
 \name{Bin}
 \alias{Bin}
+\alias{Bin.data.frame}
+\alias{Bin.data.table}
 \title{Bins continuous and categorical variables}
 \usage{
 Bin(data, var = "Bin", threshold = 0.1)
+
+\method{Bin}{data.table}(data, var = "Bin", threshold = 0.1)
+
+\method{Bin}{data.frame}(data, var = "Bin", threshold = 0.1)
 }
 \arguments{
 \item{data}{a sorted \code{data.frame} or \code{data.table}}
@@ -21,4 +27,10 @@ a \code{data.table} (invisibly) or \code{data.frame}
 \code{Bin} seperates continuos variables into bin by a maximum
    threshold.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{data.table}: Method for data.table
+
+\item \code{data.frame}: Method for data.frame
+}}
 
